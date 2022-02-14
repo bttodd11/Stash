@@ -6,11 +6,20 @@ import { StyleSheet, Text, View } from 'react-native';
 const App = () => {
 
   return (
-    <View>
+    <View style={styles.appBackground}>
     <LoginPage />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  appBackground: {
+    backgroundColor: "#DCDCDC",
+    flex: 1,
+    height: 100
+  },
+
+})
 
 export default App
 
