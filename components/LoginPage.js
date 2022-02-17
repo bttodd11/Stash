@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -12,30 +12,30 @@ import {
   BlackOpsOne_400Regular,
 } from "@expo-google-fonts/black-ops-one";
 import { ArchitectsDaughter_400Regular } from "@expo-google-fonts/architects-daughter";
-import SignIn from "./SignIn";
+import Position from 'react-native/Libraries/Components/Touchable/Position';
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [signInToggle, toggleSignIn] = React.useState(true);
+  const [userName, setUserName ] = React.useState("");
+  const [signIn, toggleSignIn] = React.useState(true);
   let [fontsLoaded] = useFonts({
     BlackOpsOne_400Regular,
     ArchitectsDaughter_400Regular,
   });
+
+
 
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
     return (
       <View>
-        {signInToggle ? 
-          <View>
-            <Text style={styles.title}>Stash</Text>
-            <Text style={styles.description}>Enjoy your privacy !</Text>
-            <View style={styles.formContainer}>
-              <TextInput
+        {signIn ? (
+          <View style={styles.formContainer}>
+            <TextInput
                 style={styles.input}
                 onChangeText={() => setFirstName(firstName)}
                 value={firstName}
@@ -59,37 +59,58 @@ const LoginPage = () => {
                 value={password}
                 placeholder={"Password"}
               />
-              <TouchableOpacity
-                style={styles.loginButton}
-                onPress={() => console.log("Test")}
-                underlayColor="#26CF8A"
-              >
-                <Text style={styles.loginButtonText}>Sign Up</Text>
-              </TouchableOpacity>
-              <Text style={styles.signInText}>
-                Have an account?
-                <Text style={styles.signIn} onPress={() => toggleSignIn(false)}>
-                  Sign In
-                </Text>
+              <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={() => console.log("Test")}
+              underlayColor="#26CF8A"
+            >
+              <Text style={styles.loginButtonText}>Sign Up</Text>
+            </TouchableOpacity>
+            <Text style={styles.signInText}>
+              Have an account?
+              <Text style={styles.signIn} onPress={() => toggleSignIn(false)}>
+                Sign In
               </Text>
-            </View>
-          </View> : <SignIn />
-        }
-      </View>
+            </Text>
+          </View>
+          </View>
+        ) : (
+          <View style={styles.formContainer}>
+          <TextInput
+            style={styles.input}
+            onChangeText={() => setUserName(userName)}
+            value={userName}
+            placeholder={"User Name"}
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={() => setPassword(password)}
+            value={password}
+            placeholder={"Password"}
+          />
+          
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity
+        style={styles.loginButton}
+        onPress={() => console.log("Test")}
+        underlayColor='#26CF8A'>
+        <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+        <Text style={styles.signInText}>Dont have an account? 
+        <Text style={styles.signIn} onPress={() => toggleSignIn(true)} >
+            Sign Up
+        </Text>
+          </Text>
+        </View> 
+        </View>
+        )}
+        </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 90,
-    textAlign: "center",
-    fontFamily: "BlackOpsOne_400Regular",
-    letterSpacing: 10,
-    marginBottom: -10,
-    marginTop: "15%",
-    color: "#95A59E",
-  },
   input: {
     height: 45,
     margin: 12,
@@ -100,17 +121,16 @@ const styles = StyleSheet.create({
     borderColor: "#95A59E",
   },
   loginButton: {
-    marginRight: 40,
-    marginLeft: 40,
-    marginTop: "20%",
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
     backgroundColor: "#26CF8A",
     borderRadius: 10,
     borderWidth: 1,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
     borderColor: "#95A59E",
+    width: "50%",
+    alignSelf: "center",
   },
   loginButtonText: {
     color: "#FFFFFF",
@@ -131,7 +151,8 @@ const styles = StyleSheet.create({
     fontFamily: "ArchitectsDaughter_400Regular",
     alignSelf: "center",
     color: "#95A59E",
-    marginTop: 10,
+    marginTop: "2%",
+    marginBottom: "2%"
   },
   signIn: {
     fontSize: 18,
@@ -141,11 +162,19 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   formContainer: {
-    height: "60%",
+    height: 500,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "black",
+    position: "relative",
+    width: "100%"
   },
+  buttonContainer: {
+   position: "absolute",
+   bottom: 0,
+  }
 });
 
 export default LoginPage;
