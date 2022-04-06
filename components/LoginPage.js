@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView
 } from "react-native";
 import AppLoading from "expo-app-loading";
 import {
@@ -12,7 +13,7 @@ import {
   BlackOpsOne_400Regular,
 } from "@expo-google-fonts/black-ops-one";
 import { ArchitectsDaughter_400Regular } from "@expo-google-fonts/architects-daughter";
-import Position from 'react-native/Libraries/Components/Touchable/Position';
+import { auth } from '../firebase';
 
 const LoginPage = (props) => {
   const [firstName, setFirstName] = React.useState("");
@@ -25,6 +26,15 @@ const LoginPage = (props) => {
     BlackOpsOne_400Regular,
     ArchitectsDaughter_400Regular,
   });
+  const handleSignup = () => {
+    // auth
+    // .createUserWithEmailandPassword(email, password)
+    // .then(userCredentials => {
+    //   const user = userCredentials.user
+    //   console.log(user)
+    // })
+    toggleSignIn(false)
+  }
 
 
 
@@ -32,7 +42,7 @@ const LoginPage = (props) => {
     return <AppLoading />;
   } else {
     return (
-      <View>
+      <KeyboardAvoidingView behavior='padding'>
         {signIn ? (
           <View style={styles.formContainer}>
             <TextInput
@@ -69,7 +79,7 @@ const LoginPage = (props) => {
             </TouchableOpacity>
             <Text style={styles.signInText}>
               Have an account?
-              <Text style={styles.signIn} onPress={() => toggleSignIn(false)}>
+              <Text style={styles.signIn} onPress={() => console.log("test")}>
                 Sign In
               </Text>
             </Text>
@@ -98,14 +108,14 @@ const LoginPage = (props) => {
         <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
         <Text style={styles.signInText}>Dont have an account? 
-        <Text style={styles.signIn} onPress={() => toggleSignIn(true)} >
+        <Text style={styles.signIn} onPress={userCredentials}>
             Sign Up
         </Text>
           </Text>
         </View> 
         </View>
         )}
-        </View>
+        </KeyboardAvoidingView>
     );
   }
 };
@@ -162,18 +172,17 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   formContainer: {
-    height: 500,
+    height: 475,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "black",
     position: "relative",
     width: "100%"
   },
   buttonContainer: {
    position: "absolute",
    bottom: 0,
+
   }
 });
 

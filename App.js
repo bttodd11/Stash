@@ -2,6 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import LoginPage from "./components/LoginPage";
 import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppLoading from 'expo-app-loading';
 import {
   useFonts,
@@ -9,23 +11,30 @@ import {
 } from "@expo-google-fonts/black-ops-one";
 import { ArchitectsDaughter_400Regular } from "@expo-google-fonts/architects-daughter";
 
+
 const App = () => {
   let [fontsLoaded] = useFonts({
     BlackOpsOne_400Regular,
     ArchitectsDaughter_400Regular,
   });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  } else {
+  const Stack  = createNativeStackNavigator();
+  console.log(Stack)
+
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // } else {
     return (
-      <View style={styles.appBackground}>
-        <Text style={styles.title}>Stash</Text>
-        <Text style={styles.description}>Enjoy your privacy !</Text>
-        <LoginPage />
-      </View>
+      <NavigationContainer>
+      <Stack.Navigator>
+    {/* <View style={styles.appBackground}> */}
+         {/* <Text style={styles.title}>Stash</Text>
+         <Text style={styles.description}>Enjoy your privacy !</Text>  */}
+       <Stack.Screen name="Login" component={LoginPage}></Stack.Screen>
+      {/* </View> */}
+      </Stack.Navigator>
+      </NavigationContainer>
     );
-  }
 };
 
 const styles = StyleSheet.create({
