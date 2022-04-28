@@ -48,6 +48,19 @@ const LoginPage = (props) => {
     )
   }
 
+  const emptyField = () => {
+    Alert.alert(
+      "Empty Field",
+      "Please fill in all fields",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        }
+      ]
+    )
+  }
+
   const invalidEmail = () => {
     Alert.alert(
       "Error",
@@ -81,21 +94,31 @@ const LoginPage = (props) => {
 
   let handleAuthentication = (state) => {
     
-    console.log(state)
-    if (state == false) {
-      auth().signInWithCredential(email, password).then(() => {
-          console.log("Logged in MF !!!");
-        });
+    if(firstName || lastName || email || password == ""){
+      emptyField();
+    }
+
+    let fbConsole = auth;
+
+    if (state === false) {
+
+      fbConsole().signInWithEmailAndPassword(email, password).then( (user) => {
+
+        console.log(user)
+      })
+
+      console.log("Signed in")
     }
 
     if (state) {
-      auth().createUserWithEmailAndPassword(email, password).then(() => {
-          console.log("User account created & signed in!");
+      fbConsole().createUserWithEmailAndPassword(email, password).then((userCredentials) => {
+          userCredentials.user.updateProfile({
+            displayName: firstName
+          })
         }).catch((error) => {
           if (error.code === "auth/email-already-in-use") {
             emailExist();
           }
-
           if (error.code === "auth/invalid-email") {
             invalidEmail();
           }
@@ -119,7 +142,7 @@ const LoginPage = (props) => {
               style={styles.input}
               onChangeText={(firstName) => setFirstName(firstName)}
               value={firstName}
-              placeholder={"First Name "}
+              placeholder={"First Name"}
             />
             <TextInput
               style={styles.input}
