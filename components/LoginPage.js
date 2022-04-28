@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Alert,
   Text,
   View,
   StyleSheet,
@@ -33,32 +34,72 @@ const LoginPage = (props) => {
     if (initializing) setInitializing(false);
   };
 
+  const emailExist = () => {
+    Alert.alert(
+      "Please Choose New Email",
+      "Email Already Exist",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ]
+    )
+  }
+
+  const invalidEmail = () => {
+    Alert.alert(
+      "Error",
+      "Please enter a valid email",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ]
+    )
+  }
+
+  let handleToggle =  () => {
+
+    // Restarting all the variables
+    setFirstName("")
+    setLastName("")
+    setEmail("")
+    setPassword("")
+    
+    // Toggle Sign-in views
+    if(signIn){
+      toggleSignIn(false)
+    }
+    else {
+      toggleSignIn(true)
+    }
+  }
+
   let handleAuthentication = (state) => {
-
+    
     console.log(state)
-
-    if(state == "Login"){
-        auth().signInWithCredential(email, password).then(() => {
-          console.log("Logged in MF !!!")
-        })
+    if (state == false) {
+      auth().signInWithCredential(email, password).then(() => {
+          console.log("Logged in MF !!!");
+        });
     }
 
-    if(state == "Sign Up"){
-    auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log("User account created & signed in!");
-      })
-      .catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          console.log("That email address is already in use!");
-        }
+    if (state) {
+      auth().createUserWithEmailAndPassword(email, password).then(() => {
+          console.log("User account created & signed in!");
+        }).catch((error) => {
+          if (error.code === "auth/email-already-in-use") {
+            emailExist();
+          }
 
-        if (error.code === "auth/invalid-email") {
-          console.log("That email address is invalid!");
-        }
-
-        console.error(error);
-      });
+          if (error.code === "auth/invalid-email") {
+            invalidEmail();
+          }
+        });
     }
   };
 
@@ -94,6 +135,7 @@ const LoginPage = (props) => {
             />
             <TextInput
               style={styles.input}
+              secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
               value={password}
               placeholder={"Password"}
@@ -101,14 +143,14 @@ const LoginPage = (props) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={() => handleAuthentication()}
+                onPress={() => handleAuthentication(signIn)}
                 underlayColor="#26CF8A"
               >
                 <Text style={styles.loginButtonText}>Sign Up</Text>
               </TouchableOpacity>
               <Text style={styles.signInText}>
                 Have an account?
-                <Text style={styles.signIn} onPress={() => toggleSignIn(false)}>
+                <Text style={styles.signIn} onPress={() => handleToggle(false)}>
                   Sign In
                 </Text>
               </Text>
@@ -124,6 +166,7 @@ const LoginPage = (props) => {
             />
             <TextInput
               style={styles.input}
+              secureTextEntry={true}
               onChangeText={(password) => setPassword(password)}
               value={password}
               placeholder={"Password"}
@@ -132,14 +175,14 @@ const LoginPage = (props) => {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.loginButton}
-                onPress={() => handleAuthentication("Login")}
+                onPress={() => handleAuthentication(signIn)}
                 underlayColor="#26CF8A"
               >
                 <Text style={styles.loginButtonText}>Login</Text>
               </TouchableOpacity>
               <Text style={styles.signInText}>
                 Dont have an account?
-                <Text style={styles.signIn} onPress={(signIn) => handleAuthentication(signIn)}>
+                <Text style={styles.signIn} onPress={() => handleToggle(signIn)}>
                   Sign Up
                 </Text>
               </Text>
