@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import LoginPage from "./components/LoginPage";
+import LoggedInView from "./components/LoggedInView";
 import { StyleSheet, Text, View } from "react-native";
 import AppLoading from 'expo-app-loading';
 import {
@@ -15,6 +16,10 @@ const App = () => {
     ArchitectsDaughter_400Regular,
   });
 
+  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+
+  console.log(userLoggedIn)
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -22,7 +27,7 @@ const App = () => {
       <View style={styles.appBackground}>
         <Text style={styles.title}>Stash</Text>
         <Text style={styles.description}>Enjoy your privacy !</Text>
-        <LoginPage />
+        {userLoggedIn ? <LoggedInView /> : <LoginPage userLog={userLoggedIn} setUserLoggedIn={setUserLoggedIn} />}
       </View>
     );
   }

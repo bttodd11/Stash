@@ -13,17 +13,17 @@ import {
   BlackOpsOne_400Regular,
 } from "@expo-google-fonts/black-ops-one";
 import { ArchitectsDaughter_400Regular } from "@expo-google-fonts/architects-daughter";
-import Position from "react-native/Libraries/Components/Touchable/Position";
 import auth from "@react-native-firebase/auth";
 
 const LoginPage = (props) => {
-  const [firstName, setFirstName] = React.useState("");
-  const [lastName, setLastName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [userName, setUserName] = React.useState("");
+  const [firstName, setFirstName] = React.useState();
+  const [lastName, setLastName] = React.useState();
+  const [email, setEmail] = React.useState();
+  const [password, setPassword] = React.useState();
   const [signIn, toggleSignIn] = React.useState(true);
   const [initializing, setInitializing] = useState(true);
+
+
 
   let [fontsLoaded] = useFonts({
     BlackOpsOne_400Regular,
@@ -93,29 +93,42 @@ const LoginPage = (props) => {
   }
 
   let handleAuthentication = (state) => {
-    
-    if(firstName || lastName || email || password == ""){
-      emptyField();
-    }
 
+
+    // For some reason I could not link all of these on the same
+    // line so I have to define them individually
+    if(firstName == undefined){
+      emptyField()
+      returnl
+    }
+    if(lastName === undefined){
+      emptyField()
+      return;
+    }
+    if(email === undefined){
+      emptyField()
+      return;
+    }
+    if(password === undefined){
+      emptyField()
+      return;
+    }
     let fbConsole = auth;
 
     if (state === false) {
-
-      fbConsole().signInWithEmailAndPassword(email, password).then( (user) => {
-
-        console.log(user)
-      })
-
-      console.log("Signed in")
+      fbConsole().signInWithEmailAndPassword(email, password).then((user) => {
+          props.setUserLoggedIn(true);
+        });
     }
 
     if (state) {
       fbConsole().createUserWithEmailAndPassword(email, password).then((userCredentials) => {
           userCredentials.user.updateProfile({
-            displayName: firstName
-          })
-        }).catch((error) => {
+            displayName: firstName,
+          });
+          props.setUserLoggedIn(true);
+        })
+        .catch((error) => {
           if (error.code === "auth/email-already-in-use") {
             emailExist();
           }
@@ -211,7 +224,12 @@ const LoginPage = (props) => {
               </Text>
             </View>
           </View>
-        )}
+        )
+        
+        
+        
+        
+        }
       </View>
     );
   }
