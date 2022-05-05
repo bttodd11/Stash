@@ -4,9 +4,10 @@ import {Text, View} from "react-native";
 
 const LoggedInView = (name) => {
 
+    console.log(name.name.displayName)
      return(
          <View>
-            <Text>Welcome </Text>
+            <Text>Welcome {name.name.displayName} </Text>
          </View>
      )
 }

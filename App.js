@@ -17,6 +17,7 @@ const App = () => {
   });
 
   const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+  const [userInfo, setUserInfo] = React.useState()
 
   console.log(userLoggedIn)
 
@@ -27,7 +28,7 @@ const App = () => {
       <View style={styles.appBackground}>
         <Text style={styles.title}>Stash</Text>
         <Text style={styles.description}>Enjoy your privacy !</Text>
-        {userLoggedIn ? <LoggedInView /> : <LoginPage userLog={userLoggedIn} setUserLoggedIn={setUserLoggedIn} />}
+        {userLoggedIn ? <LoggedInView name={userInfo} /> : <LoginPage userLog={userLoggedIn} setUserLoggedIn={setUserLoggedIn} setUserInfo={setUserInfo} />}
       </View>
     );
   }

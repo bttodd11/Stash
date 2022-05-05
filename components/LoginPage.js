@@ -23,7 +23,7 @@ const LoginPage = (props) => {
   const [signIn, toggleSignIn] = React.useState(true);
   const [initializing, setInitializing] = useState(true);
 
-
+console.log(props)
 
   let [fontsLoaded] = useFonts({
     BlackOpsOne_400Regular,
@@ -94,12 +94,14 @@ const LoginPage = (props) => {
 
   let handleAuthentication = (state) => {
 
+    let fbConsole = auth;
+
 
     // For some reason I could not link all of these on the same
     // line so I have to define them individually
     if(firstName == undefined){
       emptyField()
-      returnl
+      return;
     }
     if(lastName === undefined){
       emptyField()
@@ -113,11 +115,11 @@ const LoginPage = (props) => {
       emptyField()
       return;
     }
-    let fbConsole = auth;
 
     if (state === false) {
       fbConsole().signInWithEmailAndPassword(email, password).then((user) => {
-          props.setUserLoggedIn(true);
+        props.setUserInfo(user.user)
+          props.setUserLoggedIn(true);        
         });
     }
 
