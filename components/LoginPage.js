@@ -23,8 +23,6 @@ const LoginPage = (props) => {
   const [signIn, toggleSignIn] = React.useState(true);
   const [initializing, setInitializing] = useState(true);
 
-console.log(props)
-
   let [fontsLoaded] = useFonts({
     BlackOpsOne_400Regular,
     ArchitectsDaughter_400Regular,
@@ -118,7 +116,7 @@ console.log(props)
 
     if (state === false) {
       fbConsole().signInWithEmailAndPassword(email, password).then((user) => {
-        props.setUserInfo(user.user)
+          props.setUserInfo(user.user.displayName)
           props.setUserLoggedIn(true);        
         });
     }
@@ -128,6 +126,7 @@ console.log(props)
           userCredentials.user.updateProfile({
             displayName: firstName,
           });
+          props.setUserInfo(firstName)
           props.setUserLoggedIn(true);
         })
         .catch((error) => {

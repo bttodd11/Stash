@@ -19,8 +19,6 @@ const App = () => {
   const [userLoggedIn, setUserLoggedIn] = React.useState(false);
   const [userInfo, setUserInfo] = React.useState()
 
-  console.log(userLoggedIn)
-
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
