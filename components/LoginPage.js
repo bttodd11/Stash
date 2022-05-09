@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from "react";
-import {
-  Alert,
-  Text,
-  View,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import { Alert, Text, View, StyleSheet, TextInput, TouchableOpacity} from "react-native";
 import AppLoading from "expo-app-loading";
-import {
-  useFonts,
-  BlackOpsOne_400Regular,
-} from "@expo-google-fonts/black-ops-one";
+import { useFonts, BlackOpsOne_400Regular } from "@expo-google-fonts/black-ops-one";
 import { ArchitectsDaughter_400Regular } from "@expo-google-fonts/architects-daughter";
 import auth from "@react-native-firebase/auth";
 
@@ -40,6 +30,37 @@ const LoginPage = (props) => {
         {
           text: "Cancel",
           onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        }
+      ]
+    )
+  }
+  const userNotFound = () => {
+    // Clearing the username and password
+    setEmail("");
+    setPassword("");
+
+    Alert.alert(
+      "User Not Found",
+      "Please try again",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        }
+      ]
+    )
+  }
+
+  const wrongPassword = () => {
+    setPassword("")
+
+    Alert.alert(
+      "Wrong Password",
+      "Please try again",
+      [
+        {
+          text: "Cancel",
           style: "cancel"
         }
       ]
@@ -116,12 +137,21 @@ const LoginPage = (props) => {
 
     if (state === false) {
       fbConsole().signInWithEmailAndPassword(email, password).then((user) => {
-          props.setUserInfo(user.user.displayName)
-          props.setUserLoggedIn(true);        
-        });
+        props.setUserInfo(user.user.displayName)
+        props.setUserLoggedIn(true);
+      }).catch((error) => {
+        console.log(error)
+        if (error.code === "auth/user-not-found") {
+          userNotFound();
+        }
+        if (error.code === "auth/wrong-password"){
+          wrongPassword()
+        }
+      }
+      )
     }
 
-    if (state) {
+    if (state == true) {
       fbConsole().createUserWithEmailAndPassword(email, password).then((userCredentials) => {
           userCredentials.user.updateProfile({
             displayName: firstName,
@@ -225,12 +255,7 @@ const LoginPage = (props) => {
               </Text>
             </View>
           </View>
-        )
-        
-        
-        
-        
-        }
+        )}
       </View>
     );
   }
