@@ -12,11 +12,9 @@ const LoginPage = (props) => {
   const [password, setPassword] = React.useState();
   const [signIn, toggleSignIn] = React.useState(true);
   const [initializing, setInitializing] = useState(true);
+  let credentials;
 
-  let [fontsLoaded] = useFonts({
-    BlackOpsOne_400Regular,
-    ArchitectsDaughter_400Regular,
-  });
+  let [fontsLoaded] = useFonts({ BlackOpsOne_400Regular, ArchitectsDaughter_400Regular});
 
   let onAuthStateChanged = () => {
     if (initializing) setInitializing(false);
@@ -35,6 +33,7 @@ const LoginPage = (props) => {
       ]
     )
   }
+
   const userNotFound = () => {
     // Clearing the username and password
     setEmail("");
@@ -115,7 +114,6 @@ const LoginPage = (props) => {
 
     let fbConsole = auth;
 
-
     // For some reason I could not link all of these on the same
     // line so I have to define them individually
     if(firstName == undefined){
@@ -153,9 +151,12 @@ const LoginPage = (props) => {
 
     if (state == true) {
       fbConsole().createUserWithEmailAndPassword(email, password).then((userCredentials) => {
-          userCredentials.user.updateProfile({
+         credentials = userCredentials
+        }).then(() => {
+          credentials.user.updateProfile({
             displayName: firstName,
-          });
+          })
+        }).then(() => {
           props.setUserInfo(firstName)
           props.setUserLoggedIn(true);
         })
@@ -166,7 +167,7 @@ const LoginPage = (props) => {
           if (error.code === "auth/invalid-email") {
             invalidEmail();
           }
-        });
+        })
     }
   };
 
