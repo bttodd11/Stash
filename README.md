@@ -4,4 +4,4 @@ Purpose - Stash was created to use get authentication using React-Native. We are
 
 Technology  - React Native, Google Firebase
 
-Installation - `npm install `--- `npx react-native run-ios --simulator="iPhone 11" `  ( Sim I used )
+Installation - `npm install `  <br />  `npx react-native run-ios --simulator="iPhone 11" `  ( Sim I used )
